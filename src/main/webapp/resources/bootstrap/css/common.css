@@ -1,7 +1,7 @@
 @charset "UTF-8";
 #background {
 	content: "";
-	background-image: url('/project/resources/images/community.jpg');
+	background-image: url('/project2/resources/images/community.jpg');
 	background-size: 120%;
 	background-position: center bottom;
 	opacity: 0.15;

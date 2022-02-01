@@ -3,14 +3,14 @@
 "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-		<typeAlias alias="board" 	type="com.ch.project.model.Board" />
-		<typeAlias alias="category" type="com.ch.project.model.Category" />
-		<typeAlias alias="member" 	type="com.ch.project.model.Member" />
-		<typeAlias alias="notice" 	type="com.ch.project.model.Notice" />
-		<typeAlias alias="parti" 	type="com.ch.project.model.Parti" />
-		<typeAlias alias="rating" 	type="com.ch.project.model.Rating" />
-		<typeAlias alias="reply" 	type="com.ch.project.model.Reply" />
-		<typeAlias alias="request" 	type="com.ch.project.model.Request" />
+		<typeAlias alias="board" 	type="com.ch.project2.model.Board" />
+		<typeAlias alias="category" type="com.ch.project2.model.Category" />
+		<typeAlias alias="member" 	type="com.ch.project2.model.Member" />
+		<typeAlias alias="notice" 	type="com.ch.project2.model.Notice" />
+		<typeAlias alias="parti" 	type="com.ch.project2.model.Parti" />
+		<typeAlias alias="rating" 	type="com.ch.project2.model.Rating" />
+		<typeAlias alias="reply" 	type="com.ch.project2.model.Reply" />
+		<typeAlias alias="request" 	type="com.ch.project2.model.Request" />
 	</typeAliases>
 	<mappers>
 		<mapper resource="board.xml" />

@@ -11,10 +11,10 @@
 		var result = '${result}';
 		if(result == -1) {
 			alert('잘못된 접근입니다.');
-			location.href = '/project/home.do';
+			location.href = '/project2/home.do';
 		} else {
 			alert('요청사항을 수행하지 못 했습니다.');
-			location.href = '/project/home.do';
+			location.href = '/project2/home.do';
 		}
 	</script>
 </body>

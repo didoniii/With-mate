@@ -14,7 +14,6 @@
 	<div class="container flex-column" style="overflow: hidden">
 		<!-- header -->
 		<c:if test="${ not empty sessionScope.member }">
-		 	<jsp:include page="/WEB_INF/views/common/header_loggedIn.jsp" />
 		</c:if>
 		
 		<!-- body -->
