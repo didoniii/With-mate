@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ch.project2.dao.BoardDao;
+import com.ch.project2.model.Board;
 import com.ch.project2.model.Category;
 
 @Service
@@ -15,5 +16,9 @@ public class BoardServiceImpl implements BoardService {
 	
 	public List<Category> getCategories() {
 		return bd.getCategories();
+	}
+
+	public Board getBoard(int b_no) {
+		return bd.getBoard(b_no);
 	}
 }

@@ -2,4 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="partins">
+	<!-- 참여자 리스트  -->
+	<select id="ptList" parameterType="integer" resultType="parti">
+		SELECT p.*, m.nickname
+		FROM parti p, member m
+		WHERE b_no = #{b_no}
+		AND cancel != 'y'
+		AND ban = 'n'
+		AND p.m_id = m.m_id
+		ORDER BY p.reg_date DESC
+	</select>
 </mapper>

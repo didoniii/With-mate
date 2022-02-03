@@ -10,4 +10,6 @@ public interface BoardService {
 
 	List<Category> getCategories();
 
+	Board getBoard(int b_no);
+
 }

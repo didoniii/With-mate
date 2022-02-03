@@ -10,6 +10,8 @@ public interface BoardDao {
 
 	List<Category> getCategories();
 
+	Board getBoard(int b_no);
+
 
 	
 }

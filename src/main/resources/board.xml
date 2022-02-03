@@ -6,4 +6,8 @@
 		SELECT * FROM CATEGORY
 	</select>
 	
+	<select id="selectBoardCount">
+		SELECT COUNT(b_no) FROM BOARD
+	</select>
+	
 </mapper>
