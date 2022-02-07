@@ -243,26 +243,4 @@ public class BoardController {
 		
 		return resultMap;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }
