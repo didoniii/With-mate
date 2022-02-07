@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.ch.project.model.Request;
+import com.ch.project2.model.Request;
 import com.ch.project2.model.Board;
 import com.ch.project2.model.Member;
 import com.ch.project2.model.Parti;
