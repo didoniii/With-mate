@@ -2,12 +2,151 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="boardns">
+	<!-- 카테고리 리스트 -->
 	<select id="selectCategories" resultType="category">
 		SELECT * FROM CATEGORY
 	</select>
 	
+	<!-- 조회수 -->
 	<select id="selectBoardCount">
 		SELECT COUNT(b_no) FROM BOARD
 	</select>
+	
+	<!-- 최신 게시글 번호 -->
+	<select id = "selectMaxb_no" resultType="int">
+		SELECT NVL( MAX(b_no),0 ) FROM BOARD
+	</select>
+	
+	<!-- 게시글 DB에 넣기 (게시글 작성) -->
+	<insert id="insertBoard" parameterType="board">
+		INSERT INTO BOARD VALUES ( #{b_no}, #{m_id}, #{c_no}, #{subject}, #{s_date},
+		 #{e_date}, #{address}, #{content}, #{m_count}, #{readcount}, sysdate, 'n', 'n'})
+	</insert>
+	
+	<!-- 게시글 조회 (1개 ) -->
+	<select id="selectBoard" parameterType="int" resultMap="boardResultMap">
+		SELECT b.*, c.*, m.m_id, m.nickname
+		FROM BOARD b, CATEGORY c, MEMBER m
+		WHERE b.c_no = c.c_no 
+		AND b.m_id = m.m_id
+		AND b.b_no = #{b_no}
+	</select>
+	
+	<!-- 게시글 수정 -->
+	<update id="updateBoard" parameterType="board">
+		UPDATE BOARD
+		<set>
+			<if test="subject != null">subject = #{subject},</if>
+			<if test="address != null">address = #{address},</if>
+			<if test="content != null">content = #{content},</if>
+			<if test="m_count != null">m_count = #{m_count},</if>
+			<if test="end != null">end = #{end},</if>
+			<if test="del != null">del = #{del},</if>
+		</set>
+		WHERE b_no = #{b_no}
+	</update>
+	
+	<!-- 검색된 게시글 수 -->
+	<select id="selectSearchBoardCount" parameterType="map" resultType="int">
+		SELECT COUNT(b.b_no)
+		FROM BOARD b
+		WHERE b.del = 'n'
+		AND b.end = 'n'
+		AND b.e_date > sysdate
+		<if test="c_no != null and c_no != ''">
+			AND b.c_no = #{c_no}
+		</if>
+		<if test="s_date != null and s_date != ''">
+			AND s_date &lte; TO_DATE(#{s_date}, 'yyyy-mm-dd')
+		</if>
+		<if test="e_date != null and e_date != ''">
+			AND TO_DATE(#{e_date}, 'yyyy-mm-dd') &lt;= e_date
+		</if>
+		<if test="address != null and address != ''">
+			AND address like '%'||#{address}||'%'
+		</if>
+		<if test="keyword != null and keyword != ''">
+			AND (subject like '%'||#{keyword}||'%' or content like '%'||#{keyword}||'%')
+		</if>
+	</select>
+	
+	<!-- 검색된 게시글 리스트 (한 페이지 당) -->
+	<select id="searchBoard" parameterType="map" resultMap="boardResultMap">
+		SELECT a2.*
+		FROM ( SELECT ROWNUM rn, a1.*
+			FROM (
+				SELECT b.*, c.c_name, m.nickname
+				FROM BOARD b, CATEGORY c, MEMBER m
+				WHERE b.c_no = c.c_no
+				AND b.m_id = m.m_id
+				AND b.end ='n'
+				AND b.del = 'n'
+				AND b.e_date + 1 > sysdate
+				<if test="s_date != null and s_date != ''">
+					AND s_date &lt;= TO_DATE(#{s_date}, 'yyyy-mm-dd')
+				</if>
+				<if test="e_date != null and e_date != ''">
+					AND TO_DATE(#{e_date}, 'yyyy-mm-dd') &lt;= e_date
+				</if>
+				<if test="c_no != null and c_no != ''">
+					AND b.c_no = #{c_no}
+				</if>
+				<if test="address != null and address != ''">
+					AND address like '%'||#{address}||'%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+					AND (subject like '%'||#{keyword}||'%' or content like '%'||#{keyword}||'%')
+				</if>
+				ORDER BY b_no DESC
+				 ) a1
+			)a2
+		WHERE rn BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	<!-- 내가 작성한 게시글 수 -->
+	<select id="selectTotalMyBoard" parameterType="String" resultType="int">
+		SELECT COUNT(b_no)
+		FROM BOARD
+		WHERE m_id = #{m_id}
+	</select>		
+	
+	<!-- 내가 작성한 게시글 리스트 ( 한 페이지 당 ) -->
+	<select id="selectMyBoard" parameterType="map" resultType="boardResultMap">
+		 SELECT b2.*
+		 FROM (
+		 	SELECT ROWNUM rn, b1.*
+		 	FROM (
+		 		SELECT * FROM my_board WHERE m_id = #{m_id} ORDER BY reg_date DESC) b1
+		 	) b2
+		 WHERE rn BETWEEN #{startRow} and #{endRow}
+	</select>
+	
+	<!-- join을 위한 resultMap -->
+	<resultMap type="board" id="boardResultMap">
+		<id 	column="b_no" 		property="b_no" />
+		<result column="m_id" 		property="m_id" />
+		<result column="c_no" 		property="c_no" />
+		<result column="subject" 	property="subject" />
+		<result column="s_date" 	property="s_date" />
+		<result column="e_date" 	property="e_date" />
+		<result column="address" 	property="address" />
+		<result column="content" 	property="content" />
+		<result column="m_count" 	property="m_count" />
+		<result column="readcount" 	property="readcount" />
+		<result column="reg_date" 	property="reg_date" />
+		<result column="end"		property="end" />
+		<result column="del" 		property="del" />
+		<result column="r_score" 	property="r_score" />
+		<association property="category"	javaType="category" resultMap="categoryResultMap" />
+		<association property="member" 		javaType="member" 	resultMap="memberResultMap" />
+	</resultMap>
+	<resultMap type="category" id="categoryResultMap">
+		<id 	column="c_no" 		property="c_no" />
+		<result	column="c_name" 	property="c_name" />
+	</resultMap>
+	<resultMap type="member" id="memberResultMap">
+		<id 	column="m_id" 		property="m_id" />
+		<result	column="nickname"	property="nickname" />
+	</resultMap>
 	
 </mapper>
