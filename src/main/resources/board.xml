@@ -57,7 +57,7 @@
 			AND b.c_no = #{c_no}
 		</if>
 		<if test="s_date != null and s_date != ''">
-			AND s_date &lte; TO_DATE(#{s_date}, 'yyyy-mm-dd')
+			AND s_date &lt;= TO_DATE(#{s_date}, 'yyyy-mm-dd')
 		</if>
 		<if test="e_date != null and e_date != ''">
 			AND TO_DATE(#{e_date}, 'yyyy-mm-dd') &lt;= e_date
