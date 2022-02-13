@@ -11,8 +11,7 @@ public interface MemberService {
 	
 	int updateProfile(Member member);				// 프로필 정보 입력
 	
-	//멤버 정보 수정
-	int updateMember(Member member);				//
+	int updateMember(Member member);				// 멤버 정보 수정
 			
-	int updateRating(Member member);				//
+	int updateRating(Member member);				// 평점 수정
 }
