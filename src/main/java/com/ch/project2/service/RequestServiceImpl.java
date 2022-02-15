@@ -1,7 +1,54 @@
 package com.ch.project2.service;
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.ch.project2.dao.RequestDao;
+import com.ch.project2.model.Request;
 
 @Service
 public class RequestServiceImpl implements RequestService{
+	@Autowired
+	private RequestDao rd;
+	
+	public List<Request> rqList(int b_no) {
+		return rd.rqList(b_no);
+	}
+	public Request select(Map<String, Object> request) {
+		return rd.select(request);
+	}
+	public int insert(Map<String, Object> request) {
+		return rd.insert(request);
+	}
+	public int update(Map<String, Object> request) {
+		return rd.update(request);
+	}
+	public int accept(Map<String, Object> accept) {
+		int result = 0;
+		result += rd.accept(accept);
+		result += rd.insertParti(accept);
+		
+		return result;
+	}
+	public int reject(Map<String, Object> reject) {
+		return rd.reject(reject);
+	}
+	public int cancel(Map<String, Object> cancel) {
+		return rd.cancel(cancel);
+	}
+	public Request selectRequest(Map<String, Object> request) {
+		return rd.selectRequest(request);
+	}
+	public void rejectAll(int b_no) {
+		rd.rejectAll(b_no);
+	}
+	public int selectTotalMyRequest(String m_id) {
+		return rd.selectTotalMyRequest(m_id);
+	}
+	public List<Request> selectMyRequest(Map<String, Object> param) {
+		return rd.selectMyRequest(param);
+	}
 }

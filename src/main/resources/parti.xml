@@ -12,4 +12,108 @@
 		AND p.m_id = m.m_id
 		ORDER BY p.reg_date DESC
 	</select>
+	
+	<!-- 참여자 중 신청취소한 유저 리스트 -->
+	<select id="ptCancelList" parameterType="integer" resultType="parti">
+		SELECT p.*, m.nickname 
+		FROM parti p, member m
+		WHERE b_no = #{b_no} 
+		AND cancel = 'w'
+		AND ban = 'n' 
+		AND p.m_id = m.m_id
+		ORDER BY p.reg_date DESC
+	</select>
+	
+	<!-- 참여 강퇴 -->
+	<update id = "ban" parameterType="Map">
+		update parti set ban = 'y' where b_no = #{b_no} and m_id = #{m_id}
+	</update> 	
+	
+	<!-- 탈퇴 신청 -->
+	<update id = "ptCancel" parameterType="Map">
+		update parti set cancel = 'w' where b_no = #{b_no} and m_id = #{m_id}
+	</update>
+	
+	<!-- 탈퇴 신청 취소 -->
+	<update id = "ptReCancel" parameterType="Map">
+		update parti set cancel = 'n' where b_no = #{b_no} and m_id = #{m_id}
+	</update>
+	
+	<!-- 탈퇴 신청 수락-->
+	<update id = "pcAccess" parameterType="Map">
+		update parti set cancel = 'y' where b_no = #{b_no} and m_id = #{m_id}
+	</update>
+	
+	<!-- 탈퇴 신청 거절 -->
+	<update id = "pcReject" parameterType="Map">
+		update parti set cancel = 'n' where b_no = #{b_no} and m_id = #{m_id}
+	</update>
+	
+	<!-- 사용자가 강퇴||탈퇴 했는지 여부 판단 -->
+	<select id="banned" parameterType="map" resultType="parti">
+		SELECT p.*, m.nickname
+		FROM parti p, member m
+		WHERE b_no = #{b_no}
+		AND p.m_id = #{m_id} 
+		AND (cancel = 'y' OR ban = 'y')
+		AND p.m_id = m.m_id
+	</select>
+	
+	<select id="selectTotalMyParti" parameterType="string" resultType="int">
+		SELECT COUNT(b_no)
+		FROM PARTI
+		WHERE m_id = #{m_id}
+	</select>
+	
+	<select id="selectMyParti" parameterType="map" resultMap="partiResultMap">
+		SELECT p2.*
+		FROM (
+			SELECT ROWNUM rn, p1.*
+			FROM (
+				SELECT p.*, m.nickname, b.m_id b_m_id, b.c_no, b.subject, b.s_date, b.e_date, b.end, b.del, c.c_name, ROUND(r.r_score, 2) AS r_score
+				FROM parti p, member m, board b, category c, (
+					SELECT p1.b_no, avg(r_score) r_score
+					FROM PARTI p1, RATING r1
+					WHERE p1.m_id = r1.m_id (+)
+					AND p1.b_no = r1.b_no (+)
+					AND p1.m_id = #{m_id}
+					GROUP BY p1.b_no
+				) r
+				WHERE p.m_id = #{m_id}
+				AND p.m_id = m.m_id
+				AND p.b_no = b.b_no
+				AND p.b_no = r.b_no
+				AND b.c_no = c.c_no
+				ORDER BY p.reg_date DESC, p.b_no DESC
+			) p1
+		) p2
+		WHERE rn BETWEEN #{startRow} and #{endRow}
+	</select>
+	
+	<resultMap type="parti" 		id="partiResultMap">
+		<id 	column="b_no" 		property="b_no" />
+		<id 	column="m_id" 		property="m_id" />
+		<result column="reg_date" 	property="reg_date" />
+		<result column="cancel"		property="cancel" />
+		<result column="ban" 		property="ban" />
+		<result column="nickname" 	property="nickname" />
+		<result column="r_score" 	property="r_score" />
+		<association property="board"	javaType="board" resultMap="boardResultMap" />
+	</resultMap>
+	
+	<resultMap type="board" id="boardResultMap">
+		<result column="b_m_id" 	property="m_id" />
+		<result column="c_no" 		property="c_no" />
+		<result column="subject" 	property="subject" />
+		<result column="s_date" 	property="s_date" />
+		<result column="e_date" 	property="e_date" />
+		<result column="end"		property="end" />
+		<result column="del" 		property="del" />
+		<association property="category"	javaType="category" resultMap="categoryResultMap" />
+	</resultMap>
+	
+	<resultMap type="category" id="categoryResultMap">
+		<result	column="c_name" 	property="c_name" />
+	</resultMap>
+	
 </mapper>

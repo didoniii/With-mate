@@ -2,6 +2,61 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="memberns">
+	<!-- 아이디로 회원정보 검색 -->
+	<select id="selectMember" parameterType="string" resultType="member">
+		SELECT * FROM member WHERE m_id = #{m_id}
+	</select>
+	
+	<!-- 닉네임 중복체크 -->
+	<select id="selectMemberWithNick" parameterType="string" resultType="member">
+		SELECT * FROM member WHERE nickname = #{nickname}
+	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="insert" parameterType="member">
+		INSERT INTO MEMBER
+		VALUES (#{m_id}, #{password}, sysdate, #{nickname}, sysdate, '알 수 없음', '알 수 없음', 'user.svg', 0.0, 'n', 'n')
+	</insert>	
+	
+	<!-- 회원 프로필 수정 -->
+	<update id="updateProfile" parameterType="member">
+		UPDATE member set
+		nickname=#{nickname}, birthday=#{birthday}, place=#{place},tag=#{tag}, picture=#{picture} where m_id=#{m_id} 
+	</update>
+	
+	<!-- 회원 정보 수정 -->
+	<update id="updateMember">
+		UPDATE MEMBER
+		<set>
+			<if test="password != null">password = #{password},</if>
+			<if test="nickname != null">nickname = #{nickname},</if>
+			<if test="birthday != null">birthday = #{birthday},</if>
+			<if test="place != null">place = #{place},</if>
+			<if test="tag != null">tag = #{tag},</if>
+			<if test="picture != null">picture = #{picture},</if>
+			<!-- <if test="rating != null">rating = #{rating},</if> -->	<!-- rating type이 int라서 0으로 들어오는 경우 있음 -->
+			<if test="del != null">del = #{del},</if>
+		</set>
+		WHERE m_id = #{m_id}
+	</update>
+	
+	<!-- 평점 수정 -->
+	<update id="updateRating" parameterType="member">
+		UPDATE member SET rating = #{rating} WHERE m_id = #{m_id}
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 </mapper>
