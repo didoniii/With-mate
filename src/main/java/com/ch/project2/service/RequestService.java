@@ -12,7 +12,7 @@ public interface RequestService {
 	
 	int insert(Map<String, Object> request);		// 참여 신청
 	
-	int update(Map<String, Object> request);		// 신청 거절 후 재신청자
+	int update(Map<String, Object> request);		// 참여 재신청
 	
 	int accept(Map<String, Object> accept);			// 참여 수락
 	
@@ -20,7 +20,7 @@ public interface RequestService {
 	
 	int cancel(Map<String, Object> cancel);			// 참여 신청 취소
 	
-	// b_no, m_id로 신청한 이력 확인
+	// b_no, m_id로 신청한 이력 확인 ( 신청 중복 여부 확인 )
 	Request selectRequest(Map<String, Object> request);
 	
 	// 마지막 신청자를 수락할 때 나머지 신청자 거절

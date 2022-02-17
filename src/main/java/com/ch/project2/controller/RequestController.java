@@ -35,7 +35,7 @@ public class RequestController {
 	
 	@RequestMapping("/list")
 	public String requestList (int b_no, Model model) {
-		List<Request> requestList = rs.rqList(b_no);
+		List<Request> requestList = rs.1(b_no);
 		Board board = bs.getBoard(b_no);
 		
 		model.addAttribute("board",board);

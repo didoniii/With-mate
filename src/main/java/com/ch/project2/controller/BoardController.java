@@ -84,7 +84,8 @@ public class BoardController {
 		
 		// 1. 로그인 하지 안은 사용자(session.getAttribute("member") == null) >> 신청버튼 안나오니 만들어주지 않아도 됨
 		// 2. 로그인 한 사용자  (session.getAttribute("member") != null) >> 현재 신청한 상태인지 ( request테이블에 값이 있고  accept = 'w'& cancel = 'n')
-		if(session.getAttribute("member") != null) {
+		if(session.getAttribute("member") != null) 
+		{
 			Member member = (Member) session.getAttribute("member");
 			
 			Map<String, Object> param = new HashMap<String, Object>();
