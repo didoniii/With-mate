@@ -283,7 +283,7 @@ public class MyPageController {
 		return result+"";
 	}
 	@RequestMapping("/myBoard")
-	public String myBoard (Integer page, Model model, HttpSession session, HttpServletRequest request)
+	public String myBoard (Integer page, Model model, HttpSession session, HttpServletRequest request) {
 		if (request.getHeader("referer") == null || session.getAttribute("member") == null) {
 			return "redirect:/error.do";
 		} 

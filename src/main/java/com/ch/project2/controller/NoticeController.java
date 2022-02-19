@@ -94,7 +94,7 @@ public class NoticeController {
 	}
 	@RequestMapping("/updateForm")
 	public String updateForm(int no_no, Model model) {
-		Notice notie = ns.selectNotice(no_no);
+		Notice notice = ns.selectNotice(no_no);
 		
 		model.addAttribute("notice", notice);
 		

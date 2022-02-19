@@ -35,7 +35,7 @@ public class RequestController {
 	
 	@RequestMapping("/list")
 	public String requestList (int b_no, Model model) {
-		List<Request> requestList = rs.1(b_no);
+		List<Request> requestList = rs.rqList(b_no);
 		Board board = bs.getBoard(b_no);
 		
 		model.addAttribute("board",board);
@@ -63,7 +63,7 @@ public class RequestController {
 		Request rq = rs.selectRequest(request);
 		
 		if (rq ==null) {
-			result = rs.insert(reqest);
+			result = rs.insert(request);
 		} else if (rq.getAccept().equals("n") || rq.getCancel().equals("y")) {
 			result = rs.update(request);
 		} else {
@@ -116,20 +116,6 @@ public class RequestController {
 		return "request/requestAccept";
 	}
 	
-	@RequestMapping("/requestReject")
-	public String requestReject (@RequestParam Map<String, Object> param, Model model) {
-		int result = 0; //거절 실패
-		result = rs.reject(param);
-		
-		String m_id = (String) param.get("m_id");
-		Member member = ms.selectMember(m_id);
-		
-		model.addAttribute("result", result);
-		model.addAttribute("b_no", b_no);
-		model.addAttribute("member", member);
-		
-		return "request/requestAccept";
-	}
 	
 	@RequestMapping ("/requestReject")
 	public String requestReject (@RequestParam Map<String, Object> param, Model model) {

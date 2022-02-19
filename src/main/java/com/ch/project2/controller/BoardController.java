@@ -2,7 +2,6 @@ package com.ch.project2.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Year;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ch.project2.model.Board;
 import com.ch.project2.model.Category;
@@ -27,7 +27,6 @@ import com.ch.project2.service.PartiService;
 import com.ch.project2.service.RequestService;
 import com.google.gson.Gson;
 
-import oracle.net.aso.m;
 
 @Controller
 @RequestMapping("/board")
@@ -108,7 +107,7 @@ public class BoardController {
 			}
 		}
 		// 4. 현재 참여자 명수가 게시글 참여자 명수 + 1(글쓴이 포함)과 같은 경우
-		List<Parti> partiList = ps.ptLsit(b_no);
+		List<Parti> partiList = ps.ptList(b_no);
 		if(board.getM_count() == partiList.size() + 1 ) {
 			model.addAttribute("full", true);
 		}else {
@@ -163,7 +162,7 @@ public class BoardController {
 	@RequestMapping("/searchList")
 	public String searchListForm(@RequestParam Map<String, Object> param, Model model) throws ParseException {
 		// 카테고리 리스트
-		List<Category> categoryList = bs.getCategories();\
+		List<Category> categoryList = bs.getCategories();
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
@@ -184,7 +183,7 @@ public class BoardController {
 		return "board/searchList";
 	}	
 	@RequestMapping(value = "/search", produces = "application/json;charset=utf-8")
-	@RequestBody
+	@ResponseBody
 	public Map<String, Object> searchList(@RequestBody Map<String, Object> param) {
 		// 게시글 검색
 		

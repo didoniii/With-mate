@@ -81,7 +81,7 @@ public class PartiController {
 		Member member = new Member();
 		member.setM_id(m_id);
 		member.setRating(avg);
-		int updateResult = ms.updateRatng(member);
+		int updateResult = ms.updateRating(member);
 		
 		Member selectedMember = ms.selectMember(m_id);
 		

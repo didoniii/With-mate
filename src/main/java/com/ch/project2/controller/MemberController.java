@@ -7,7 +7,9 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.mail.Session;
@@ -137,7 +139,7 @@ public class MemberController {
 		
 		member.setPicture(fileName);
 		member.setBirthday(birthday);
-		member.setPlace(place);(place);
+		member.setPlace(place);
 		member.setTag(tag);
 		
 		int result = 0;
@@ -206,7 +208,7 @@ public class MemberController {
 	public String loginForm(HttpServletRequest request, Model model) {
 		String prev = "";
 	
-		if(request.getHeader("referer" != null) {
+		if(request.getHeader("referer") != null) {
 			prev = request.getHeader("referer");
 		}
 		
