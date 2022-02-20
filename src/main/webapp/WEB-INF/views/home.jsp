@@ -178,6 +178,35 @@
 		frm.address.value = '';
 	}
 	
+	frm.address.addEventListener('keyup', function() {
+		$('[name="address"]').autocomplete({ // 자동완성 시작
+			source : //list
+			function(request, response){
+				var results = $.ui.autocomplete.filter(list, request.term);
+				response(results.slice(0, 30));
+			},		// source는 자동완성 대상
+			select : function(event, ui){
+				frm.address.blur();
+				frm.address.value = ui.item.value;
+			},
+			open : function(event, ui){
+				$(this).autocomplete('widget')
+					.css('box-shadow', ' 0 0 4px #808080')
+					.css('border-radius', '5px')
+			},
+			focus : function(event, ui){
+				return false;
+			},
+			classes : {
+				"ui-autocomplete" : "scroll"
+			},
+			minLength: 1,
+			autoFocus: false,
+			delay: 500,
+			position: { my: "right top", at: "right bottom"}
+		});
+	})
+	
 	
 	
 	function img1() {
