@@ -197,37 +197,161 @@
 					document.querySelector('#password').value = '';
 					document.querySelector('#passwordChk').value = '';
 					document.querySelectorAll('.msg')[2].innerHTML = '';
-					
+				}
+				
+				// 이메일 부분이 열려있으면 이메일 input값을 지우고 닫음
+				if ($('#nCollapse').hasClass('in')){
+					$('#nCollapse').collapse('hide');
+					document.querySelector('#nickname').value = '';
+					document.querySelectorAll('.msg')[3].innerHTML = '';
+					document.querySelector('button[type="submit"]').setAttribute('disabled', 'disabled');
 				}
 			}
 		}
 		
+		function authMailSend(id){
+			$.post('${_member}/authUser.do', 'm_id='+id, function(data){
+				num = data
+			})
+		}
 		
+		// 비밀번호 유효성 검사
+		function passwordChk(event){
+			var password, passwordChk, msg;
+			password = document.querySelector('#password').value;
+			passwordChk = document.querySelector('#passwordChk').value;
+			msg = document.querySelectorAll('.msg')[2];
+			
+			// 비밀번호 유효성 검사 >> 비밀번호가 유효해야 비밀번호 일치 불일치 판단
+			if(!/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,15}$/.test(password)){
+				msg.classList.replace('ok','err');
+				msg.innerHTML = '비밀번호는 숫자, 영소문자, 영대문자  조합 8~15자로 만들어주세요.';
+				
+			// 비밀번호가 유효한 경우
+			}else {
+				msg.classList.replace('err','ok');
+				msg.innerHTML = '유효한 비밀번호입니다.';
+				
+				// 비밀번호와 비밀번호 확인이 비어있지 않은 경우에만 둘을 비교
+				// 비밀번호는 유효한다 확인과 일치하지 않은 경우
+				if (password != null && passwordChk !== '') {
+					if (password != passwordChk) {
+						msg.classList.replace('ok','err');
+						msg.innerHTML = '비밀번호가 일치하지 않습니다.';
+						
+					//비밀번호와 확인이 일치
+					} else if (password == passwordChk) {
+						msg.classList.replace('err','ok');
+						msg.innerHTML = '비밀번호가 일치합니다.';
+						
+						//이메일 부분 열기
+						$('#nCollapse').collapse('show');
+						return;
+					}
+				}
+			}
 		
+			// 이메일 부분이 열려있으면 이메일 input값을 지우고 닫음
+			if ($('#nCollapse').hasClass('in')){
+				$('#nCollapse').collapse('hide');
+				document.querySelector('#nickname').value = '';
+				document.querySelectorAll('.msg')[3].innerHTML = '';
+				document.querySelector('button[type="submit"]').setAttribute('disabled', 'disabled');
+			}
+		}
 		
+		async function nickChk(){
+			var nickname = document.querySelector('#nickname').value,
+			msg = document.querySelectorAll('.msg')[3],
+			sendData = 'nickname='+nickname;
+			
+			var result = await fetch('${_member}/nickChk.do',{
+				method : 'POST',
+				body : sendData,
+				headers : {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			}).then(function(response) {
+				return response.text();
+			})
+			
+			if (nickname.trim() == '' || nickname == null){
+				msg.innerHTML = '별명을 입력하세요.';
+			}else if (/[^가-힣|\w]/.test(nickname)) {
+				msg.innerHTML = '별명에 특수문자는 입력할 수 없습니다.';
+			}else if (getByteLength(nickname) > 15) {
+				msg.innerHTML = '별명은 최대 한글5글자, 영숫자 15글자 입니다.';
+			}else if (result == '1') {
+				msg.innerHTML = '사용 가능한 별명입니다.';
+				msg.classList.replace('err','ok');
+				document.querySelector('button[type="submit"]').removeAttribute('disabled')
+				return;
+			}else if (result != '1') {
+				msg.innerHTML = '중복된 별명입니다.';
+			}
+			
+			msg.classList.replace('ok','err');
+			document.querySelector('button[type="submit"]').setAttribute('disabled', 'disabled');
+		}
 		
+		frm.onsubmit = function(){
+			event.preventDefault();
+			var sendData = $('form[name=frm]').serialize();
+			
+			var div = document.createElement('div');
+			div.className = 'loading';
+			div.innerHTML = '<div><i class="fas fa-spinner fa-spin fa-5x mg-b-5"></i></div><div>Loading...</div>'
+			
+			document.querySelector('body').insertBefore(div,null);
+			
+			randomTime = parseInt(Math.random()*1000) + 1000;
+			
+			setTimeout(function() {
+				$.post('${_member}/join.do', sendData, function(data) {
+					div.className = 'hide';
+					if (data < 0) {
+						alert('잘못된 접근입니다.');
+						location.href = "${_}/home.do";
+					}else if (data == 0) {
+						alert('요청을 수행하지 못했습니다.');
+						location.href = "${_}/home.do";
+					}else {
+						$('#myModal').modal({
+							backdrop : 'static'
+						});
+						
+						document.querySelector('#profileForm').addEventListener('click', function() {
+							//m_id="아이디"쭉 붙는게 보기 싫어서 form 만들어서 보냄
+							var newForm = document.createElement('form');
+							newForm.setAttribute('method', 'POST');
+							newForm.setAttribute('action', '${_member}/profileForm.do');
+							
+							var newInput = document.createElement('input');
+							newInput.setAttribute('type', 'text');
+							newInput.setAttribute('name', 'm_id');
+							newInput.setAttribute('value', data);
+							
+							newForm.appendChild(newInput);
+							document.body.appendChild(newForm);
+
+							newForm.submit();
+						})
+						
+						document.querySelector('#loginForm').addEventListener('click', function() {
+							location.href = '${_member}/loginForm.do';
+						})
+					}
+				});
+			}, randomTime);
+		}
 		
-		
-		
-		
-		
-		
-		
-		
+		function getByteLength(string){
+			var byteLength, c, i;
+			for(byteLength = i = 0; c = string.charCodeAt(i++); byteLength += c>>11 ? 3 : c>>7 ? 2 : 1);
+			return byteLength;
+		}
 		
 	</script>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 </body>
 </html>
