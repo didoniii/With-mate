@@ -19,7 +19,7 @@
 2️⃣ Database 모델링 
 ![image](https://user-images.githubusercontent.com/87827545/155072964-e46d6a3f-3288-43d5-90b2-d93a35581fa2.png)
 
-3️⃣ 구현 기능 : 제가 맡은 파트는 신청, 참가 로직과 댓글 (비밀댓글), 평점 매기기 입니다.
+3️⃣ 구현 기능 : 제가 맡은 파트는 신청/ 참가 로직, 댓글 (비밀댓글), 상호 평가 입니다.
 ![image](https://user-images.githubusercontent.com/87827545/155073214-d7e80883-2972-4405-bc1e-1b69b9833450.png)
 
 
