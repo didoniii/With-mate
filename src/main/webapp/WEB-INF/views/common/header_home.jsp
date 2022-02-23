@@ -7,9 +7,9 @@
 	</div>
 	<div class="j-end align-end f-1" style="margin-bottom: 15px;">
 		<div class="align-end pd-3">
-			<a href="${notice }/list.do" class="btn btn-link mg-r-5"><strong>공지사항</strong></a>
-			<a href="${member }/loginForm.do" class="btn btn-primary mg-r-5">로그인</a>		
-			<a href="${member }/joinForm.do" class="btn btn-default">회원가입</a>		
+			<a href="${notice}/list.do" class="btn btn-link mg-r-5"><strong>공지사항</strong></a>
+			<a href="${member}/loginForm.do" class="btn btn-primary mg-r-5">로그인</a>		
+			<a href="${member}/joinForm.do" class="btn btn-default">회원가입</a>		
 		</div>
 	</div>
 </div>

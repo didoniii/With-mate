@@ -8,6 +8,13 @@
 <title>같이 가치</title>
 </head>
 <body>
-
+	<script type="text/javascript">
+		var result = '${result}';
+		if (result < 0) {
+			alert('잘못된 접근입니다.');
+		} else {
+			location.href = '${_}/profileForm'
+		}
+	</script>
 </body>
 </html>

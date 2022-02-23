@@ -111,7 +111,7 @@
 	</select>		
 	
 	<!-- 내가 작성한 게시글 리스트 ( 한 페이지 당 ) -->
-	<select id="selectMyBoard" parameterType="map" resultType="boardResultMap">
+	<select id="selectMyBoard" parameterType="map" resultMap="boardResultMap">
 		 SELECT b2.*
 		 FROM (
 		 	SELECT ROWNUM rn, b1.*

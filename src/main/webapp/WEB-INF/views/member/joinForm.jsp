@@ -30,7 +30,7 @@
 					<input type="email" id="m_id" name="m_id" class="form-control" 
 					required="required" placeholder="이메일">
 					<span class="input-group-btn">
-						<button id="idChkBtn" class="btn btn-primary" type="button">확인</button>
+						<button id="idChkBtn" class="btn btn-primary" type="button">중복 확인</button>
 					</span>
 				</div>
 				<div class="msg err"></div>
@@ -41,7 +41,7 @@
 					<input type="text" id="auth" class="form-control" 
 					required="required" placeholder="인증번호">
 					<span class="input-group-btn">
-						<button id="authChkBtn" class="btn btn-primary" type="button"> 확인 </button>	
+						<button id="authChkBtn" class="btn btn-primary" type="button">인증 확인 </button>	
 					</span>
 				</div>
 				<div class="msg err"></div>
